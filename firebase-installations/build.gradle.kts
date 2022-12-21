@@ -184,6 +184,18 @@ if (project.property("firebase-installations.skipIosTests") == "true") {
     }
 }
 
+if (project.property("firebase-installations.skipTvosTests") == "true") {
+    tasks.forEach {
+        if (it.name.contains("ios", true) && it.name.contains("test", true)) { it.enabled = false }
+    }
+}
+
+if (project.property("firebase-installations.skipMacosTests") == "true") {
+    tasks.forEach {
+        if (it.name.contains("ios", true) && it.name.contains("test", true)) { it.enabled = false }
+    }
+}
+
 //signing {
 //    val signingKey: String? by project
 //    val signingPassword: String? by project

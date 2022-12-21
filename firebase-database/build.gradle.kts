@@ -210,6 +210,18 @@ if (project.property("firebase-database.skipIosTests") == "true") {
     }
 }
 
+if (project.property("firebase-database.skipTvosTests") == "true") {
+    tasks.forEach {
+        if (it.name.contains("ios", true) && it.name.contains("test", true)) { it.enabled = false }
+    }
+}
+
+if (project.property("firebase-database.skipMacosTests") == "true") {
+    tasks.forEach {
+        if (it.name.contains("ios", true) && it.name.contains("test", true)) { it.enabled = false }
+    }
+}
+
 //signing {
 //    val signingKey: String? by project
 //    val signingPassword: String? by project
