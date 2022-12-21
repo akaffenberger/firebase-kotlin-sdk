@@ -87,8 +87,8 @@ kotlin {
     }
 
     val supportIosTarget = project.property("skipIosTarget") != "true"
-    val supportTvosTarget = false//project.property("skipTvosTarget") != "true"
-    val supportMacosTarget = false//project.property("skipMacosTarget") != "true"
+    val supportTvosTarget = project.property("skipTvosTarget") != "true"
+    val supportMacosTarget = project.property("skipMacosTarget") != "true"
 
     fun darwinTargetConfig(): KotlinNativeTarget.() -> Unit = {
         val nativeFrameworkPaths = listOf(
@@ -196,8 +196,8 @@ kotlin {
         }
 
         if (supportIosTarget) {
-            val iosMain by getting { dependsOn(darwinMain) }
-            val iosTest by sourceSets.getting { dependsOn(darwinTest) }
+            val iosMain by getting
+            val iosTest by sourceSets.getting
         }
 
         if (supportTvosTarget) {
