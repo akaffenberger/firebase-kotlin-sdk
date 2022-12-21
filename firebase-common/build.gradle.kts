@@ -47,10 +47,22 @@ kotlin {
     }
 
     val supportIosTarget = project.property("skipIosTarget") != "true"
+    val supportTvosTarget = project.property("skipTvosTarget") != "true"
+    val supportMacosTarget = project.property("skipMacosTarget") != "true"
 
     if (supportIosTarget) {
         ios()
         iosSimulatorArm64("ios")
+    }
+
+    if (supportTvosTarget) {
+        tvos()
+        tvosSimulatorArm64("tvos")
+    }
+
+    if (supportMacosTarget) {
+        macosX64()
+        macosArm64()
     }
 
     js {
@@ -96,9 +108,29 @@ kotlin {
             }
         }
 
+        val darwinMain by creating {
+            dependsOn(commonMain)
+        }
+
+        val darwinTest by creating {
+            dependsOn(commonMain)
+        }
+
         if (supportIosTarget) {
-            val iosMain by getting
-            val iosTest by sourceSets.getting
+            val iosMain by getting { dependsOn(darwinMain) }
+            val iosTest by sourceSets.getting { dependsOn(darwinTest) }
+        }
+
+        if (supportTvosTarget) {
+            val tvosMain by getting { dependsOn(darwinMain) }
+            val tvosTest by sourceSets.getting { dependsOn(darwinTest) }
+        }
+
+        if (supportMacosTarget) {
+            val macosX64Main by getting { dependsOn(darwinMain) }
+            val macosX64Test by sourceSets.getting { dependsOn(darwinTest) }
+            val macosArm64Main by getting { dependsOn(darwinMain) }
+            val macosArm64Test by sourceSets.getting { dependsOn(darwinTest) }
         }
 
         val jsMain by getting {
