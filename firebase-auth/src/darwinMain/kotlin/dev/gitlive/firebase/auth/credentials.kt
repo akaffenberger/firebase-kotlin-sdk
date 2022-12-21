@@ -11,7 +11,6 @@ actual open class AuthCredential(open val ios: FIRAuthCredential) {
         get() = ios.provider
 }
 
-class PhoneAuthCredential(override val ios: FIRPhoneAuthCredential) : AuthCredential(ios)
 actual class OAuthCredential(override val ios: FIROAuthCredential) : AuthCredential(ios)
 
 actual object EmailAuthProvider {
@@ -68,24 +67,6 @@ actual class OAuthProvider(val ios: FIROAuthProvider) {
             return OAuthCredential(credential)
         }
     }
-}
-
-class PhoneAuthProvider(val ios: FIRPhoneAuthProvider) {
-
-    constructor(auth: FirebaseAuth) : this(FIRPhoneAuthProvider.providerWithAuth(auth.ios))
-
-    fun credential(verificationId: String, smsCode: String): PhoneAuthCredential = PhoneAuthCredential(ios.credentialWithVerificationID(verificationId, smsCode))
-
-    suspend fun verifyPhoneNumber(phoneNumber: String, verificationProvider: PhoneVerificationProvider): AuthCredential {
-        val verificationId: String = ios.awaitResult { ios.verifyPhoneNumber(phoneNumber, verificationProvider.delegate, it) }
-        val verificationCode = verificationProvider.getVerificationCode()
-        return credential(verificationId, verificationCode)
-    }
-}
-
-interface PhoneVerificationProvider {
-    val delegate: FIRAuthUIDelegateProtocol
-    suspend fun getVerificationCode(): String
 }
 
 actual object TwitterAuthProvider {
